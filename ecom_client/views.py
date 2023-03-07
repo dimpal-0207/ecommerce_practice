@@ -163,3 +163,23 @@ from django.views.decorators.csrf import csrf_exempt
 #         return HttpResponse('Ecommerce view')
 #     else:
 #         return HttpResponse('User not authenticated')
+
+# for celery app add configuration
+# def test(request):
+#     test_func.delay()
+#     return HttpResponse('<h4>hello</h4>')
+#
+#
+# def send_mail(request):
+#     send_mail_func.delay()
+#     print("===sendmail", send_mail_func)
+#     a1 = "hi how are you"
+#     return render(request, 'index.html', {'a1':a1})
+#
+#
+# def schedule_mail(request):
+#     schedule, created = CrontabSchedule.objects.get_or_create(hour =21, minute =16, timezone='Asia/kolkata')
+#     task = PeriodicTask.objects.create(crontab=schedule, name="schedule_mail_task_"+"13", task='celery_app.tasks.send_mail_func')#, args = json.dumps([[2,3]]))
+#     return HttpResponse("Done")
+
+#cronjob hour set as per how many time periodically task will perform as same as minute also

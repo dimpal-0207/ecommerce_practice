@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'ecom_client'
+    'ecom_client',
+    'celery_app',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +125,25 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+#email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = 'True'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'dimpalpatel233@gmail.com'
+EMAIL_HOST_PASSWORD = 'sqkmdhfsusslrelq'
+# sqkmdhfsusslrelq
+DEFAULT_FROM_EMAIL = 'Celery <dimpalpatel233@gmail.com>'
+
+#celery settings
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/kolkata'
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
