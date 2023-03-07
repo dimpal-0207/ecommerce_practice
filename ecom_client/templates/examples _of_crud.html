@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+<script>
+$("#btnsave1").click(function(){
+    console.log("clicked on save button");
+    let sid = $("#stuid").val();
+    let uname = $('#userid').val();
+    let lname = $('#lastid').val();
+    let ema = $('#emailid').val();
+    let cn = $('#contactid').val();
+    let output = '';
+    if (uname == "" ){
+    console.log("enter username ");}
+    else if(lname == "" ){
+    console.log("enter lastname")
+    }
+     else if(ema == "" ){
+    console.log("enter email")
+    }
+     else if(cn == "" ){
+    console.log("enter contact")
+    }else {
+<!--    console.log(uname);-->
+<!--    console.log(lname);-->
+<!--    console.log(ema);-->
+    mydata = {stuid : sid , username:uname, lastname:lname, email:ema, contact:cn };
+    $.ajax ({
+    url : "/add_user/",
+    method :"POST",
+    data : mydata,
+    success: function(data) {
+     let x = data.list_data;
+    if (data.status == "success"){
+        $("#msg").text("form submitted successfully "); // for show message
+        $("#msg").show();
+        $('#msg').delay(4000).fadeOut('slow');
+
+    for(i=0; i < x.length; i++){
+        output += "<tr><td>" + x[i].id + "</td><td>" + x[i].username + "</td><td>" + x[i].lastname + "</td><td>" + x[i].email + "</td><td>" + x[i].contact + "</td><td>"
+        +"<input type='button' class='btn btn-primary btn-edit' value='edit' data-sid= " + x[i].id  + " id='1' ></td>"
+                +"<td><input type='button' class='btn btn-primary btn-del' value='delete' data-sid=" + x[i].id  + " id='2' ></td></tr>";
+    }
+    $("#tbody").html(output);
+    $("#stuid").val('');
+    $('form')[0].reset();
+    }
+    },
+    });
+
+    }
+
+});
+
+
+
+</script>
+<script>
+    // delete data on click button
+
+$("tbody").on("click" , ".btn-del", function(){
+let id = $(this).attr("data-sid");
+console.log(id);
+mydata = {sid:id};
+console.log(mydata)
+console.log("delete button clicked ");
+mythis = this;
+console.log(mythis);
+
+$.ajax({
+url : "/delete_user/",
+method : "POST",
+data : mydata ,
+success : function(data){
+<!--console.log(data);-->
+    if (data.success == 1 ){
+        $("#msg").text("data deleted successfully ");
+        $("#msg").show();
+        $('#msg').delay(4000).fadeOut('slow');
+
+$("tbody").on("click" , ".btn-del", function(){
+let id = $(this).attr("data-sid");
+console.log(id);
+mydata = {sid:id};
+console.log(mydata)
+console.log("delete button clicked ");
+mythis = this;
+console.log(mythis);
+
+$.ajax({
+url : "/delete_user/",
+method : "POST",
+data : mydata ,
+success : function(data){
+<!--console.log(data);-->
+    if (data.success == 1 ){
+        $("#msg").text("data deleted successfully ");
+        $("#msg").show();
+        $('#msg').delay(4000).fadeOut('slow');
+
+        $(this).closest('tr').fadeOut();
+
+    }
+
+},
+});
+});
+
+
+    }
+
+},
+});
+});
+
+</script>
+<script>
+    // edit data on click button
+
+$("tbody").on("click" , ".btn-edit", function(){
+let id = $(this).attr("data-sid");
+console.log(id);
+mydata = {sid:id};
+console.log(mydata)
+console.log("edit button clicked ");
+
+
+$.ajax({
+url : "/edit_user/",
+method : "POST",
+data : mydata ,
+success : function(data){
+    <!--console.log(data);-->
+    $("#stuid").val(data.id);
+    $("#userid").val(data.username);
+    $("#lastid").val(data.lastname);
+    $("#emailid").val(data.email);
+    $("#contactid").val(data.contact);
+
+    if (data.success == 1 ){
+        console.log("edit data successfully ")
+        $(mythis).closest("tr").fadeOut();
+    }
+
+},
+});
+});
+
+</script>
+
+</body>
+</html>
